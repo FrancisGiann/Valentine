@@ -5,117 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Be My Valentine?</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-red: #ff4d6d;
-            --soft-pink: #ff8fa3;
-            --dark-red: #800f2f;
-        }
-
-        body {
-            background: linear-gradient(135deg, #fff0f3, #ffb3c1);
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-        }
-
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
-            text-align: center;
-            z-index: 10;
-            max-width: 400px;
-            border: 4px solid var(--primary-red);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .profile-img {
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 5px solid var(--primary-red);
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        #sad-img {
-            display: none;
-        }
-
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            color: var(--dark-red);
-            font-size: 2.5rem;
-            margin: 10px 0;
-        }
-
-        .btn-group {
-            margin-top: 30px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            height: 50px;
-        }
-
-        button {
-            padding: 12px 35px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            white-space: nowrap;
-        }
-
-        #initial-yes-btn, #final-yes-btn {
-            background-color: var(--primary-red);
-            color: white;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
-            z-index: 20;
-        }
-
-        #initial-yes-btn:hover, #final-yes-btn:hover {
-            transform: scale(1.1);
-            background-color: var(--dark-red);
-        }
-
-        #no-btn {
-            background-color: #e0e0e0;
-            color: #666;
-            position: relative;
-            z-index: 20;
-            transition: all 0.3s ease;
-        }
-
-        #final-btn-group {
-            display: none;
-        }
-
-        #success-msg {
-            display: none;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="card" id="main-card">
         <img src="francis.jpg" alt="Me happy" class="profile-img" id="normal-img">
-        <img src="sad-francis.png" alt="Me sad" class="profile-img" id="sad-img">
+        <img src="sad-francis-hq.png" alt="Me sad" class="profile-img" id="sad-img">
         
         <h1 id="question-text">Will you be my Valentine?</h1>
         
@@ -130,87 +26,16 @@
     </div>
 
     <div class="card" id="success-msg">
-        <h1 style="font-size: 3.5rem;">Yay! ❤️</h1>
-        <p style="color: var(--dark-red); font-size: 1.2rem;">Can't wait to see you on</p>
-        <h2 style="color: var(--primary-red);">February 14</h2>
+        <img src="happy-emoji.png" alt="Love" class="success-img">
+        <h1 class="yay-text">Yay! ❤️</h1>
+        <p class="sub-text">Can't wait to see you on</p>
+        <h2 class="date-text">February 14</h2>
     </div>
 
-    <audio id="sad-music" src="sad-music.mp3" loop></audio>
-    <audio id="happy-music" src="happy-music.mp3" loop></audio>
-    
+    <audio id="sad-music" src="sad-music.mp3"></audio>
+    <audio id="happy-music" src="happy-music.mp3"></audio>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script>
-        const noBtn = document.getElementById('no-btn');
-        const initialYesBtn = document.getElementById('initial-yes-btn');
-        const finalYesBtn = document.getElementById('final-yes-btn');
-        const mainCard = document.getElementById('main-card');
-        const successMsg = document.getElementById('success-msg');
-        const sadMusic = document.getElementById('sad-music');
-        const happyMusic = document.getElementById('happy-music');
-        const normalImg = document.getElementById('normal-img');
-        const sadImg = document.getElementById('sad-img');
-        const questionText = document.getElementById('question-text');
-        const initialBtnGroup = document.getElementById('initial-btn-group');
-        const finalBtnGroup = document.getElementById('final-btn-group');
-        
-        let noClicks = 0;
-
-        // --- The "No" Logic ---
-        noBtn.addEventListener('click', () => {
-            noClicks++;
-            
-            if (noClicks < 5) {
-                // Clicks 1-4: Dodge
-                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 50);
-                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 50);
-                noBtn.style.position = 'fixed';
-                noBtn.style.left = Math.max(20, x) + 'px';
-                noBtn.style.top = Math.max(20, y) + 'px';
-
-            } else {
-                // Click 5: Trigger Sad State
-                normalImg.style.display = 'none';
-                sadImg.style.display = 'inline-block';
-                questionText.innerText = "Ouch... you broke my heart.";
-                initialBtnGroup.style.display = 'none';
-                finalBtnGroup.style.display = 'flex';
-                
-                sadMusic.volume = 0.5;
-                sadMusic.play();
-            }
-        });
-
-        // --- The "Yes" Logic (for both buttons) ---
-        function triggerSuccess() {
-            mainCard.style.display = 'none';
-            successMsg.style.display = 'block';
-            
-            sadMusic.pause();
-            sadMusic.currentTime = 0;
-            
-            happyMusic.volume = 0.6;
-            happyMusic.play();
-
-            // Confetti
-            var end = Date.now() + (3 * 1000);
-            var colors = ['#ff4d6d', '#ff8fa3', '#ffffff'];
-
-            (function frame() {
-              confetti({
-                particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors
-              });
-              confetti({
-                particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors
-              });
-              if (Date.now() < end) {
-                requestAnimationFrame(frame);
-              }
-            }());
-        }
-
-        initialYesBtn.addEventListener('click', triggerSuccess);
-        finalYesBtn.addEventListener('click', triggerSuccess);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
