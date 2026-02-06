@@ -10,6 +10,9 @@ const sadImg = document.getElementById('sad-img');
 const questionText = document.getElementById('question-text');
 const initialBtnGroup = document.getElementById('initial-btn-group');
 const finalBtnGroup = document.getElementById('final-btn-group');
+const letterBtn = document.getElementById('letter-btn');
+const letterModal = document.getElementById('letter-modal');
+const closeBtn = document.querySelector('.close-btn');
 
 let noClicks = 0;
 const messages = [
@@ -59,3 +62,19 @@ function triggerSuccess() {
 
 initialYesBtn.addEventListener('click', triggerSuccess);
 finalYesBtn.addEventListener('click', triggerSuccess);
+
+letterBtn.addEventListener('click', () => {
+    letterModal.style.display = 'flex';
+});
+
+// Close modal when clicking (X)
+closeBtn.addEventListener('click', () => {
+    letterModal.style.display = 'none';
+});
+
+// Close modal when clicking outside the box
+window.addEventListener('click', (e) => {
+    if (e.target === letterModal) {
+        letterModal.style.display = 'none';
+    }
+});
